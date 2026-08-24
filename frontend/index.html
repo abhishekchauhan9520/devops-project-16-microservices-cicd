@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Microservices CI/CD Demo</title>
+</head>
+<body>
+  <main>
+    <h1>Microservices CI/CD Demo</h1>
+    <p>Call the backend services through the Nginx reverse proxy.</p>
+    <button id="callA">Call Service A</button>
+    <button id="callB">Call Service B</button>
+    <pre id="out" aria-live="polite"></pre>
+  </main>
+  <script>
+    const out = document.getElementById('out');
+    async function call(url) {
+      try {
+        const response = await fetch(url);
+        const body = await response.json();
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        out.textContent = JSON.stringify(body, null, 2);
+      } catch (error) {
+        out.textContent = `Request failed: ${error.message}`;
+      }
+    }
+    document.getElementById('callA').onclick = () => call('/service-a/');
+    document.getElementById('callB').onclick = () => call('/service-b/');
+  </script>
+</body>
+</html>
